@@ -7,7 +7,9 @@ let count = 0
 const randomNumber = (min, max) =>
     Math.round(Math.random() * (max - min) + min)
 
-export const loop = (dispatch, getState) => async () => {
+export const loop = (dispatch, getState, lastLTime = Date.now()) => async () => {
+    const lTime = Date.now()
+    const elapsedLTime = lTime - lastLTime
     const { players, playersList, cars, carsList, speed } = getState().board
 
     const newCarsList = playersList.map((player) => {
@@ -27,25 +29,16 @@ export const loop = (dispatch, getState) => async () => {
         // car.angle = player.payload.angle
 
         // const radians = car.angle * Math.PI / 180
+        const delta = (elapsedLTime / 200) * (speed / 3)
         const radians = (car.angle - 90) / 180 * Math.PI
-        car.posX += 3 * Math.cos(radians)
-        car.posY += 3 * Math.sin(radians)
-
-        // console.log(car.angle, radians)
-        
-        // console.log(car.angle, Math.sin(car.angle), Math.cos(car.angle))
+        car.posX += delta * Math.cos(radians)
+        car.posY += delta * Math.sin(radians)
 
         return car
     })
 
-    // console.log(newCarsList)
     dispatch(updateCars(newCarsList))
-
-    // if (count > 30) return
-    // count++
-
-    await new Promise(resolve => setTimeout(resolve, 10))
-    frameId = window.requestAnimationFrame(loop(dispatch, getState))
+    frameId = window.requestAnimationFrame(loop(dispatch, getState, lTime))
 }
 
 export const start = () => (dispatch, getState) => {

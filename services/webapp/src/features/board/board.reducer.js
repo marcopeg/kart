@@ -14,6 +14,7 @@ export const initialState = {
 
 export const SET_BOARD_ID = 'setBoardId@board'
 export const SET_PLAYER = 'setPlayer@board'
+export const SET_SPEED = 'setSpeed@board'
 export const REMOVE_PLAYER = 'removePlayer@board'
 export const UPDATE_PLAYER = 'updatePlayer@board'
 export const UPDATE_CARS = 'updateCars@board'
@@ -30,6 +31,13 @@ export const setPlayer = (id, data) => ({
     payload: {
         id: Number(id),
         data: Object(data),
+    },
+})
+
+export const setSpeed = (value) => ({
+    type: SET_SPEED,
+    payload: {
+        value: Number(value),
     },
 })
 
@@ -77,6 +85,10 @@ export const actionHandlers = {
             })),
         }
     },
+    [SET_SPEED]: (state, { payload }) => ({
+        ...state,
+        speed: payload.value,
+    }),
     [REMOVE_PLAYER]: (state, { payload }) => {
         const players = { ...state.players }
         delete players[payload.id]

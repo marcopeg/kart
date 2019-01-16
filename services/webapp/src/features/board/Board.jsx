@@ -3,6 +3,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { initBoard } from './board.service'
+import { setSpeed } from './board.reducer'
 
 import MobilePage from 'components/MobilePage'
 import BoardUI from './components/BoardUI'
@@ -10,9 +11,13 @@ import BoardUI from './components/BoardUI'
 const mapState = ({ board }, { match }) => ({
     boardId: board.id,
     cars: board.carsList,
+    speed: board.speed,
 })
 
-const mapDispatch = { initBoard }
+const mapDispatch = {
+    initBoard,
+    setSpeed,
+}
 
 class Board extends React.PureComponent {
     componentDidMount () {
